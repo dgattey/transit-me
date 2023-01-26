@@ -1,0 +1,19 @@
+{
+  "name": "transit-me",
+  "version": "1.0.0",
+  "description": "Finds the next bike + bart ride between two locations using Strava + Bart API",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dgattey/transit-me.git"
+  },
+  "author": "Dylan Gattey <hi@dylangattey.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dgattey/transit-me/issues"
+  },
+  "homepage": "https://github.com/dgattey/transit-me#readme"
+}
