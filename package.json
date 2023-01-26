@@ -4,6 +4,7 @@
   "description": "Finds the next bike + bart ride between two locations using Strava + Bart API",
   "main": "index.ts",
   "scripts": {
+    "go": "node -r @swc-node/register src/getNextTrip.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -15,5 +16,10 @@
   "bugs": {
     "url": "https://github.com/dgattey/transit-me/issues"
   },
-  "homepage": "https://github.com/dgattey/transit-me#readme"
+  "homepage": "https://github.com/dgattey/transit-me#readme",
+  "dependencies": {
+    "@swc-node/register": "^1.5.5",
+    "@swc/core": "^1.3.29",
+    "typescript": "^4.9.4"
+  }
 }
