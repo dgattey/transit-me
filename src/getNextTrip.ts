@@ -38,7 +38,7 @@ function getFormattedTime(date: Date) {
       minute: "2-digit",
       hour12: true,
     })
-    .replace(" ", "+");
+    .toLowerCase();
 }
 
 /**
@@ -81,7 +81,7 @@ const PROMPT_QUESTIONS = [
     type: "date",
     name: "arrival",
     message: "When do you need to be there?",
-    mask: "HH:mm",
+    mask: "hh:mm a",
     initial: (_: unknown, values: Record<string, unknown>) =>
       values.arrivalDate,
     validate: (date: number) =>
@@ -102,8 +102,8 @@ function getBufferedArrival(
       : BIKE_BUFFER_TIME_MIN_DUBL;
   const message =
     dest === WORK_STATION
-      ? `\t${BIKE_BUFFER_TIME_MIN_CIVC} min biking from Civic Center\n\t${SHOWER_BUFFER_TIME_MIN} min shower`
-      : `\t${BIKE_BUFFER_TIME_MIN_DUBL} min biking home`;
+      ? `- ${BIKE_BUFFER_TIME_MIN_CIVC} min biking from Civic Center\n- ${SHOWER_BUFFER_TIME_MIN} min shower`
+      : `- ${BIKE_BUFFER_TIME_MIN_DUBL} min biking home`;
   const bufferedArrival = new Date(arrival);
   bufferedArrival.setMinutes(arrival.getMinutes() - bufferedTime);
   return { date: bufferedArrival, message };
@@ -122,8 +122,8 @@ function getBufferedDeparture(
       : BIKE_BUFFER_TIME_MIN_CIVC;
   const message =
     dest === WORK_STATION
-      ? `\t${BIKE_BUFFER_TIME_MIN_DUBL} min biking to Dublin/Pleasanton station`
-      : `\t${BIKE_BUFFER_TIME_MIN_CIVC} min biking to Civic Center station`;
+      ? `- ${BIKE_BUFFER_TIME_MIN_DUBL} min biking to Dublin/Pleasanton station`
+      : `- ${BIKE_BUFFER_TIME_MIN_CIVC} min biking to Civic Center station`;
   const bufferedDeparture = new Date(departure);
   bufferedDeparture.setMinutes(departure.getMinutes() - bufferedTime);
   return { date: bufferedDeparture, message };
@@ -134,7 +134,7 @@ function getBufferedDeparture(
  */
 function constructSchedUrl(arrival: Date, dest: Station): URL {
   const arrivalDate = getFormattedDate(arrival);
-  const arrivalTime = getFormattedTime(arrival);
+  const arrivalTime = getFormattedTime(arrival).replace(" ", "+");
   const schedSearchParams = new URLSearchParams({
     ...BART_DEFAULT_SEARCH_PARAMS,
     cmd: "arrive",
@@ -182,7 +182,9 @@ function constructSchedUrl(arrival: Date, dest: Station): URL {
   const { date: bufferedDeparture, message: departureMessage } =
     getBufferedDeparture(departure, dest);
 
-  console.log(`\n👉 Leave by ${getFormattedTime(bufferedDeparture)}`);
+  console.log(
+    `\n👉 Leave by \x1b[1;46m${getFormattedTime(bufferedDeparture)}\x1b[0m`
+  );
   console.log(
     `(Catching the ${trip[`@origTimeMin`]} train to arrive at ${
       trip[`@destTimeMin`]
@@ -192,6 +194,6 @@ function constructSchedUrl(arrival: Date, dest: Station): URL {
   console.log();
   console.log(`That takes into account:`);
   console.log(departureMessage);
-  console.log(`\t${trip[`@tripTime`]} min on the train`);
+  console.log(`- ${trip[`@tripTime`]} min on the train`);
   console.log(arrivalMessage);
 })();
